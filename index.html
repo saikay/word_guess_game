@@ -30,6 +30,7 @@
             my_guess: [],
             message: "Hangman!",
             win: false,
+            //set game back to default
             resetGame: function(){
                 var index = Math.round(Math.random()* this.word_list.length);
                 for(var i= 0; i < this.word_list[index].length; i++){
@@ -42,6 +43,7 @@
                 this.message = "Hangman!"
             },
             
+            //main game logic
             game: function(letter) {
                 var key = letter.key.toLowerCase();
                 var regex = /[a-zA-Z]/g;
@@ -63,7 +65,8 @@
                 document.getElementById("my_guesses").innerHTML = this.my_guess.toString();
                 
             },
-
+            
+            //check user input. If match secret word, update match_letters and insert letter into guessed list.
             checkLetter: function(letter){
 
                 for(var i=0; i < this.secret_word.length; i++){
@@ -73,7 +76,8 @@
                 }
                 this.my_guess.push(letter);
             },
-
+            
+            //check win conditions.
             checkWin: function(){
                 if(this.match_letters.toString() == this.secret_word.toString()){
                     this.message = "You Win,press key to reset.";
