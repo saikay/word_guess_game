@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Word Guess Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="assets\css\style.css" />
+    
+</head>
+<body>
+    <div>
+        <p id="message"></p>
+        <p>Letter match so far</p>
+        <p id="match_letters"></p>
+        <p>Number of guesses left:</p>
+        <p id="lives"> </p>
+        <p>My guessed letters:</p>
+        <p id="my_guesses"></p>
+
+    </div>
+    <script>
+        var guess_game = {
+            //pool of words to select.
+            word_list: ["Dennis","Ariel","Meme","Thethe"],
+            //secret word.
+            secret_word: [],
+            match_letters : [],
+            lives: 10,
+            my_guess: [],
+            message: "Hangman!",
+            win: false,
+            resetGame: function(){
+                var index = Math.round(Math.random()* this.word_list.length);
+                for(var i= 0; i < this.word_list[index].length; i++){
+                    this.match_letters[i] = "_";
+                    this.secret_word[i] = this.word_list[index][i];
+                }
+                this.lives = 10;
+                this.my_guess = [];
+                this.win = false;
+                this.message = "Hangman!"
+            },
+            
+            game: function(letter) {
+                var key = letter.key.toLowerCase();
+                var regex = /[a-zA-Z]/g;
+
+                if (this.lives > 0 && key.length == 1 && key.match(regex)){
+                    this.lives = this.lives - 1;
+                    this.checkLetter(key);
+                    this.checkWin();
+
+                }else if(this.lives ==0 || this.win == true){
+                    //reset game when lives reach 0;
+                    this.resetGame();
+                }
+                
+                //print score.
+                document.getElementById("message").innerHTML= this.message;
+                document.getElementById("match_letters").innerHTML = this.match_letters.toString();
+                document.getElementById("lives").innerHTML = this.lives;
+                document.getElementById("my_guesses").innerHTML = this.my_guess.toString();
+                
+            },
+
+            checkLetter: function(letter){
+
+                for(var i=0; i < this.secret_word.length; i++){
+                    if(this.secret_word[i].toLowerCase() == letter.toLowerCase()){
+                        this.match_letters[i] = this.secret_word[i];
+                    }
+                }
+                this.my_guess.push(letter);
+            },
+
+            checkWin: function(){
+                if(this.match_letters.toString() == this.secret_word.toString()){
+                    this.message = "You Win,press key to reset.";
+                    this.win = true;
+                }else if(this.lives == 0){
+                    this.message = "You Lose,press key to reset.";
+                }
+            },
+
+        }
+
+        guess_game.resetGame();
+        document.onkeyup = function(event){
+            guess_game.game(event);
+        };
+    </script>
+</body>
+</html>
