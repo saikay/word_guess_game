@@ -48,7 +48,8 @@
                 var key = letter.key.toLowerCase();
                 var regex = /[a-zA-Z]/g;
 
-                if (this.lives > 0 && key.length == 1 && key.match(regex)){
+                //have lives, key is one character, and character was not guess preivously.
+                if (this.lives > 0 && key.length == 1 && key.match(regex) && this.my_guess.indexOf(key)== -1){
                     this.lives = this.lives - 1;
                     this.checkLetter(key);
                     this.checkWin();
@@ -56,6 +57,11 @@
                 }else if(this.lives ==0 || this.win == true){
                     //reset game when lives reach 0;
                     this.resetGame();
+                }else if(this.my_guess.indexOf(key) >= 0){
+                    this.message = "You already guess " + key;
+                }else{
+                    //other entries.
+                    this.message = "Must enter alphabatical characters.";
                 }
                 
                 //print score.
