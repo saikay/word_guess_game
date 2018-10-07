@@ -46,6 +46,7 @@
             //set game back to default
             resetGame: function(){
                 var index = Math.round(Math.random()* this.word_list.length);
+                this.match_letters = [];
                 for(var i= 0; i < this.word_list[index].length; i++){
                     this.match_letters[i] = "_";
                     this.secret_word[i] = this.word_list[index][i];
