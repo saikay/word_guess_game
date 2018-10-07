@@ -56,6 +56,10 @@
                 this.win = false;
                 this.message = "Guess which fruit I am thinking!"
                 document.getElementById("message").innerHTML= this.message;
+                document.getElementById("match_letters").innerHTML = this.match_letters.toString();
+                document.getElementById("my_guesses").innerHTML = this.my_guess.toString();
+                //draw lives.
+                this.drawLives(this.lives);
             },
             
             //main game logic
