@@ -6,29 +6,42 @@
     <title>Word Guess Game</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="assets\css\style.css" />
-    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 </head>
 <body>
-    <div>
-        <p id="message"></p>
-        <p>Letter match so far</p>
-        <p id="match_letters"></p>
-        <p>Number of guesses left:</p>
-        <p id="lives"> </p>
-        <p>My guessed letters:</p>
-        <p id="my_guesses"></p>
-
-    </div>
+        <h1 class="title text-center">HANGMAN!</h1>
+        <div class="content bg-light mx-5 my-5 pb-3" >
+            
+            <div class="row d-flex justify-content-center">
+                <div class="col-md-12 text-center ">
+                <h3 id="message" class="py-5"></h3>
+                <span>Letter match so far</span><br>
+                <span id="match_letters"></span><br>
+                <span>Number of guesses left:</span>
+                <div id="lives"> </div>
+                <span>My guessed letters:</span>
+                <span id="my_guesses"></span></div>
+            </div>        
+        </div>
     <script>
         var guess_game = {
             //pool of words to select.
-            word_list: ["Dennis","Ariel","Meme","Thethe"],
+            word_list: ["Apple", "Aricot", "Banana", "Bilberry", 
+            "Blackberry", "Blackcurrant", "Blueberry", "Coconut", 
+            "Currant", "Cherry", "Cherimoya", "Clementine", "Cloudberry", 
+            "Date", "Damson", "Durian", "Elderberry", "Fig", "Feijoa", "Gooseberry", 
+            "Grape", "Grapefruit", "Huckleberry", "Jackfruit", "Jambul", "Jujube", "Kiwifruit", 
+            "Kumquat", "Lemon", "Lime", "Loquat", "Lychee", "Mango", "Melon", "Cantaloupe", 
+            "Honeydew", "Watermelon", "Nectarine", "Orange", "Passionfruit", 
+            "Peach", "Pear", "Plum", "Plumcot", "Prune", "Pineapple", "Pomegranate", "Pomelo", 
+            "Purple mangosteen", "Raisin", "Raspberry", "Rambutan", "Redcurrant", "Satsuma", 
+            "Strawberry", "Tangerine", "Tomato"],
             //secret word.
             secret_word: [],
             match_letters : [],
             lives: 10,
             my_guess: [],
-            message: "Hangman!",
+            message: "Guess which fruit I am thinking!",
             win: false,
             //set game back to default
             resetGame: function(){
@@ -40,18 +53,21 @@
                 this.lives = 10;
                 this.my_guess = [];
                 this.win = false;
-                this.message = "Hangman!"
+                this.message = "Guess which fruit I am thinking!"
+                document.getElementById("message").innerHTML= this.message;
             },
             
             //main game logic
             game: function(letter) {
                 var key = letter.key.toLowerCase();
                 var regex = /[a-zA-Z]/g;
-
+  
                 //have lives, key is one character, and character was not guess preivously.
                 if (this.lives > 0 && key.length == 1 && key.match(regex) && this.my_guess.indexOf(key)== -1){
-                    this.lives = this.lives - 1;
-                    this.checkLetter(key);
+                    
+                    if(!this.isMatch(key)){
+                        this.lives = this.lives - 1;    
+                    }
                     this.checkWin();
 
                 }else if(this.lives ==0 || this.win == true){
@@ -67,20 +83,23 @@
                 //print score.
                 document.getElementById("message").innerHTML= this.message;
                 document.getElementById("match_letters").innerHTML = this.match_letters.toString();
-                document.getElementById("lives").innerHTML = this.lives;
                 document.getElementById("my_guesses").innerHTML = this.my_guess.toString();
-                
+                //draw lives.
+                this.drawLives(this.lives);
             },
             
             //check user input. If match secret word, update match_letters and insert letter into guessed list.
-            checkLetter: function(letter){
-
+            isMatch: function(letter){
+                var isMatch=false;
+                this.my_guess.push(letter);
                 for(var i=0; i < this.secret_word.length; i++){
                     if(this.secret_word[i].toLowerCase() == letter.toLowerCase()){
                         this.match_letters[i] = this.secret_word[i];
+                        isMatch = true;
                     }
                 }
-                this.my_guess.push(letter);
+
+                return isMatch;
             },
             
             //check win conditions.
@@ -92,7 +111,18 @@
                     this.message = "You Lose,press key to reset.";
                 }
             },
-
+            
+            //print number of lives on lives element.
+            drawLives: function(lives){
+                document.getElementById("lives").innerHTML = "";
+                for(var i=0; i< lives;i++){
+                    var newDiv = document.createElement("img");
+                    newDiv.setAttribute("src","assets/images/fruits-apple.gif");
+                    newDiv.setAttribute("height","25px");
+                    newDiv.setAttribute("width","25px");
+                    document.getElementById("lives").appendChild(newDiv);
+                }
+            }
         }
 
         guess_game.resetGame();

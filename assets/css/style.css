@@ -1,0 +1,10 @@
+.title{
+    padding-top:20px;
+}
+
+body{
+    background-image:url("../images/fruity-background.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
